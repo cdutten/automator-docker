@@ -1,13 +1,18 @@
 version: '2'
 services:
 
+  front:
+    build: ./src/front
+    ports:
+      - 3000:80
+
   php:
     image: jguyomard/laravel-php:7.3
     volumes:
-      - ./:/var/www/
+      - ./src/api:/var/www/
       - $HOME/.composer/:$HOME/.composer/
     environment:
-      - "DB_HOST=mysql"
+      - "DB_HOST=pgsql"
       - "DB_DATABASE=homestead"
       - "DB_USERNAME=homestead"
       - "DB_PASSWORD=homestead"
@@ -21,39 +26,27 @@ services:
     ports:
       - 8080:80
 
-  mysql:
-    image: mysql:5.7
+  pgsql:
+    image: postgres:9.6-alpine
     volumes:
-      - mysqldata:/var/lib/mysql
+      - pgsqldata:/var/lib/postgresql/data
     environment:
-      - "MYSQL_ROOT_PASSWORD=secret"
-      - "MYSQL_DATABASE=homestead"
-      - "MYSQL_USER=homestead"
-      - "MYSQL_PASSWORD=homestead"
-#    ports:
-#        - "3306:3306"
-
-#  pgsql:
-#    image: postgres:9.6-alpine
-#    volumes:
-#      - pgsqldata:/var/lib/postgresql/data
-#    environment:
-#      - "POSTGRES_DB=homestead"
-#      - "POSTGRES_USER=homestead"
-#      - "POSTGRES_PASSWORD=homestead"
-#    ports:
-#        - "5432:5432"
+      - "POSTGRES_DB=homestead"
+      - "POSTGRES_USER=homestead"
+      - "POSTGRES_PASSWORD=homestead"
+    ports:
+        - "5432:5432"
 
   redis:
     image: redis:4.0-alpine
     command: redis-server --appendonly yes
-#    ports:
-#        - "6379:6379"
+    ports:
+        - "6379:6379"
 
-#  elastic:
-#    image: elasticsearch:5.5-alpine
-#    ports:
-#        - "9200:9200"
+  elastic:
+    image: elasticsearch:5.5-alpine
+    ports:
+        - "9200:9200"
 
 volumes:
   mysqldata:
