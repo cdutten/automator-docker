@@ -1,3 +1,7 @@
+# Docker for boring-things-automator project
+
+This is the original readme of the project
+
 # Docker Images for Laravel development
 [![Docker Build Status](https://img.shields.io/docker/build/jguyomard/laravel-php.svg?style=flat-square)](https://hub.docker.com/r/jguyomard/laravel-php/)
 [![Docker Build Status](https://img.shields.io/docker/build/jguyomard/laravel-nginx.svg?style=flat-square)](https://hub.docker.com/r/jguyomard/laravel-nginx/)
