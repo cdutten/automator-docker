@@ -1,11 +1,6 @@
 version: '2'
 services:
 
-  front:
-    build: ./src/front
-    ports:
-      - 3000:80
-
   php:
     image: jguyomard/laravel-php:7.3
     volumes:
@@ -35,18 +30,12 @@ services:
       - "POSTGRES_USER=homestead"
       - "POSTGRES_PASSWORD=homestead"
     ports:
-        - "5432:5432"
-
-  redis:
-    image: redis:4.0-alpine
-    command: redis-server --appendonly yes
-    ports:
-        - "6379:6379"
+      - "5432:5432"
 
   elastic:
     image: elasticsearch:5.5-alpine
     ports:
-        - "9200:9200"
+      - "9200:9200"
 
 volumes:
   mysqldata:
