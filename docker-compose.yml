@@ -1,23 +1,26 @@
-version: '2'
+version: '3'
 services:
 
   php:
-    image: jguyomard/laravel-php:7.3
+    build: ./php/7.3
     volumes:
       - ./src/api:/var/www/
       - $HOME/.composer/:$HOME/.composer/
     environment:
-      - "DB_HOST=pgsql"
-      - "DB_DATABASE=homestead"
-      - "DB_USERNAME=homestead"
-      - "DB_PASSWORD=homestead"
-      - "REDIS_HOST=redis"
-      - "REDIS_PORT=6379"
-
+      DB_CONNECTION: pgsql
+      DB_HOST: pgsql
+      DB_PORT: 5432
+      DB_DATABASE: laravel
+      DB_USERNAME: homestead
+      DB_PASSWORD: homestead
+      REDIS_HOST: redisdo
+      REDIS_PORT: 6379
+      XDEBUG_CONFIG: zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so xdebug.remote_enable=1 xdebug.remote_autostart=1 xdebug.remote_connect_back=off xdebug.remote_host=host.docker.internal xdebug.remote_port=9005 xdebug.idekey=PHPSTORM xdebug.max_nesting_level=1500
   nginx:
     image: jguyomard/laravel-nginx:1.13
-    volumes_from:
-      - php
+    volumes:
+      - ./src/api:/var/www/
+      - $HOME/.composer/:$HOME/.composer/
     ports:
       - 8080:80
 
@@ -26,16 +29,16 @@ services:
     volumes:
       - pgsqldata:/var/lib/postgresql/data
     environment:
-      - "POSTGRES_DB=homestead"
-      - "POSTGRES_USER=homestead"
-      - "POSTGRES_PASSWORD=homestead"
+       POSTGRES_DB: laravel
+       POSTGRES_USER: homestead
+       POSTGRES_PASSWORD: homestead
     ports:
-      - "5432:5432"
+      - 5433:5432
 
   elastic:
     image: elasticsearch:5.5-alpine
     ports:
-      - "9200:9200"
+      - 9200:9200
 
 volumes:
   mysqldata:
