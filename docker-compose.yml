@@ -1,11 +1,10 @@
 version: '3'
 services:
 
-  php:
+  api:
     build: ./php/7.3
     volumes:
-      - ./src/api:/var/www/
-      - $HOME/.composer/:$HOME/.composer/
+      - ./src/api:/var/www/api
     environment:
       DB_CONNECTION: pgsql
       DB_HOST: pgsql
@@ -16,11 +15,11 @@ services:
       REDIS_HOST: redisdo
       REDIS_PORT: 6379
       XDEBUG_CONFIG: zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so xdebug.remote_enable=1 xdebug.remote_autostart=1 xdebug.remote_connect_back=off xdebug.remote_host=host.docker.internal xdebug.remote_port=9005 xdebug.idekey=PHPSTORM xdebug.max_nesting_level=1500
+  
   nginx:
-    image: jguyomard/laravel-nginx:1.13
+    build: ./nginx/1.13
     volumes:
-      - ./src/api:/var/www/
-      - $HOME/.composer/:$HOME/.composer/
+      - ./src/api:/var/www/api
     ports:
       - 8080:80
 
@@ -39,6 +38,16 @@ services:
     image: elasticsearch:5.5-alpine
     ports:
       - 9200:9200
+  
+  composer:     
+    image: composer:latest     
+    container_name: composer     
+    volumes:       
+      - ./src/api:/var/www/api     
+    working_dir: /var/www/api
+    depends_on:
+      - api
+    entrypoint: ['composer'] 
 
 volumes:
   mysqldata:
