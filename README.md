@@ -1,4 +1,4 @@
-# Docker for boring-things-automator project
+# Docker for automator-docker project
 
 This is the original readme of the project
 
